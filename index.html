@@ -7,20 +7,30 @@
     <style>
         /* --- CHARTE GRAPHIQUE ACCESSIBLE & VARIABLES --- */
         :root {
-            /* Palette Rose Gold adaptée (Contraste suffisant WCAG AA) */
+            /* Rose Gold métallique réajusté pour le contraste WCAG AA */
             --rose-gold-main: #A25762;
             --rose-gold-dark: #7A3C45;
-            --rose-gold-gradient: linear-gradient(135deg, #B86B76 0%, #A25762 50%, #7A3C45 100%);
-            --rose-gold-shine: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 70%);
             
-            --dark-text: #211B1C; /* Contraste élevé pour la lisibilité */
-            --light-bg: #FAF6F6;  /* Fond très doux, non aveuglant */
+            /* Dégradé Rose Gold intégrant directement le reflet brillant */
+            --rose-gold-shiny-gradient: linear-gradient(
+                110deg, 
+                #8E4651 0%, 
+                #A25762 25%, 
+                #F3D0D5 45%, 
+                #FFFFFF 50%, 
+                #F3D0D5 55%, 
+                #A25762 75%, 
+                #7A3C45 100%
+            );
+            
+            --dark-text: #211B1C;
+            --light-bg: #FAF6F6;
             --card-bg: #FFFFFF;
             --border-color: #B8A2A5;
-            --focus-outline: #005A9C; /* Bleu à haut contraste pour le focus clavier */
+            --focus-outline: #005A9C;
         }
 
-        /* Support automatique du Mode Sombre (pour sensibilité oculaire) */
+        /* Support automatique du Mode Sombre */
         @media (prefers-color-scheme: dark) {
             :root {
                 --dark-text: #F5EBEB;
@@ -29,10 +39,20 @@
                 --border-color: #5C4B4E;
                 --rose-gold-main: #D4818D;
                 --rose-gold-dark: #E8A8B1;
+                --rose-gold-shiny-gradient: linear-gradient(
+                    110deg, 
+                    #B86B76 0%, 
+                    #D4818D 25%, 
+                    #FFE3E7 45%, 
+                    #FFFFFF 50%, 
+                    #FFE3E7 55%, 
+                    #D4818D 75%, 
+                    #E8A8B1 100%
+                );
             }
         }
 
-        /* --- STYLES GÉNÉRAUX ACCESSIBLES --- */
+        /* --- STYLES GÉNÉRAUX --- */
         * {
             margin: 0;
             padding: 0;
@@ -47,7 +67,6 @@
             font-size: 1.05rem;
         }
 
-        /* Titres lisibles */
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', Georgia, serif;
             color: var(--dark-text);
@@ -58,7 +77,6 @@
             color: inherit;
         }
 
-        /* Lien d'évitement pour lecteurs d'écran & clavier */
         .skip-link {
             position: absolute;
             top: -40px;
@@ -74,7 +92,6 @@
             top: 10px;
         }
 
-        /* Indicateurs de focus accessibles (Navigation au clavier) */
         :focus-visible {
             outline: 3px solid var(--focus-outline);
             outline-offset: 3px;
@@ -86,55 +103,43 @@
             padding: 0 20px;
         }
 
-        /* Texte Rose Gold Lisible */
+        /* --- EFFET ROSE GOLD BRILLANT FIXE --- */
         .gold-text {
-            color: var(--rose-gold-main);
+            background: var(--rose-gold-shiny-gradient);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 700;
+            display: inline-block;
         }
 
-        /* --- BOUTONS ACCESSIBLES --- */
+        /* --- BOUTONS BRILLANTS STABLES --- */
         .btn {
-            position: relative;
             display: inline-block;
-            background: var(--rose-gold-main);
+            background: var(--rose-gold-shiny-gradient);
+            background-size: 200% auto;
+            background-position: 0% center;
             color: #FFFFFF;
             padding: 14px 32px;
             border-radius: 50px;
             font-weight: 700;
             letter-spacing: 0.5px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            border: 2px solid transparent;
+            transition: background-position 0.6s ease, box-shadow 0.3s ease;
+            border: none;
             cursor: pointer;
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(162, 87, 98, 0.25);
         }
 
+        /* Glissement fluide de la lumière au survol sans bouger le bouton */
         .btn:hover, .btn:focus-visible {
-            background: var(--rose-gold-dark);
+            background-position: 100% center;
             color: #FFFFFF;
-            transform: translateY(-2px);
-        }
-
-        /* Effet brillant doux (désactivé si l'utilisateur réduit les animations) */
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--rose-gold-shine);
-            transition: left 0.6s ease;
-        }
-
-        .btn:hover::after {
-            left: 100%;
+            box-shadow: 0 6px 18px rgba(162, 87, 98, 0.4);
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .btn::after {
-                display: none;
-            }
             * {
                 transition: none !important;
                 animation: none !important;
@@ -327,10 +332,8 @@
 </head>
 <body>
 
-    <!-- LIEN D'ÉVITEMENT ACCESSIBILITÉ -->
     <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
 
-    <!-- BARRE DE NAVIGATION -->
     <header role="banner">
         <div class="container">
             <nav role="navigation" aria-label="Navigation principale">
@@ -346,10 +349,8 @@
         </div>
     </header>
 
-    <!-- CONTENU PRINCIPAL -->
     <main id="contenu-principal">
 
-        <!-- SECTION HERO (ACCUEIL) -->
         <section id="accueil" class="hero" aria-labelledby="titre-hero">
             <div class="container">
                 <h1 id="titre-hero">Libérez vos tensions, <span class="gold-text">retrouvez l'harmonie</span></h1>
@@ -358,21 +359,18 @@
             </div>
         </section>
 
-        <!-- SECTION CONCEPT -->
         <section id="concept" class="about" aria-labelledby="titre-concept">
             <div class="container">
                 <h2 id="titre-concept">L'art du <span class="gold-text">toucher bienveillant</span></h2>
-                <p>À l'institut <strong>La Main Douce</strong>, nous croyons que chaque corps est unique. Nos massages sont entièrement personnalisés et réalisés avec des huiles biologiques et naturelles, sélectionnées pour leurs vertus thérapeutiques et relaxantes. Un voyage sensoriel dédié à votre bien-être global.</p>
+                <p>À l'institut <strong>La Main Douce</strong>, nous croyons que chaque corps est unique. Nos massages sont entièrement personnalisés et réalisés avec des huiles biologiques et naturelles, sélectionnées pour leurs vertus thérapeutique et relaxantes. Un voyage sensoriel dédié à votre bien-être global.</p>
             </div>
         </section>
 
-        <!-- SECTION MASSAGES -->
         <section id="soins" class="services" aria-labelledby="titre-soins">
             <div class="container">
                 <h2 id="titre-soins">Nos Massages <span class="gold-text">Signatures</span></h2>
                 <div class="grid-services">
                     
-                    <!-- Soin 1 -->
                     <article class="card">
                         <div>
                             <div class="duration">Durée : 60 ou 90 minutes</div>
@@ -383,7 +381,6 @@
                         <a href="#contact" class="btn" aria-label="Réserver le massage Suédois Relaxant">Choisir ce soin</a>
                     </article>
 
-                    <!-- Soin 2 -->
                     <article class="card">
                         <div>
                             <div class="duration">Durée : 75 minutes</div>
@@ -394,7 +391,6 @@
                         <a href="#contact" class="btn" aria-label="Réserver le massage Énergétique Abhyanga">Choisir ce soin</a>
                     </article>
 
-                    <!-- Soin 3 -->
                     <article class="card">
                         <div>
                             <div class="duration">Durée : 60 minutes</div>
@@ -411,13 +407,12 @@
 
     </main>
 
-    <!-- FOOTER / CONTACT -->
     <footer id="contact" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 
                 <div class="footer-col">
-                    <h4>La Main Douce</h4>
+                    <h4 class="gold-text">La Main Douce</h4>
                     <p>Votre havre de paix dédié au massage bien-être.</p>
                 </div>
 
