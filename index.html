@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cocon De Noémie | Institut de Massage & Bien-être</title>
-    <!-- Inclusion du SDK EmailJS -->
+    <!-- SDK EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         /* --- CHARTE GRAPHIQUE ACCESSIBLE & VARIABLES --- */
@@ -568,7 +568,7 @@
                     <h4>Contact & Réservation</h4>
                     <p>📍 Adresse : 12 rue de la Détente, 75000 Paris</p>
                     <p>📞 Téléphone : <a href="tel:0123456789">01 23 45 67 89</a></p>
-                    <p>✉️ E-mail : <a href="mailto:contact@cocondenoemie.com">contact@cocondenoemie.com</a></p>
+                    <p>✉️ E-mail : <a href="mailto:hleflem.ledantec@gmail.com">hleflem.ledantec@gmail.com</a></p>
                 </div>
 
             </div>
@@ -580,9 +580,9 @@
     </footer>
 
     <script>
-        // Initialisation d'EmailJS (Remplace TA_PUBLIC_KEY)
+        // Initialisation EmailJS
         (function() {
-            emailjs.init("TA_PUBLIC_KEY");
+            emailjs.init("M6de6YCUhvbj0fKeU");
         })();
 
         const modal = document.getElementById('bookingModal');
@@ -621,32 +621,32 @@
             }
         });
 
-        // Envoi automatique du mail
         bookingForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
             submitBtn.disabled = true;
             submitBtn.textContent = 'Envoi en cours...';
 
+            // Adapté pour correspondre à vos variables
             const templateParams = {
-                soin: soinSelect.value,
-                date: document.getElementById('dateSelect').value,
-                heure: document.getElementById('timeSelect').value,
-                nom: document.getElementById('nomInput').value,
+                title: soinSelect.value,
+                name: document.getElementById('nomInput').value,
                 email: document.getElementById('emailInput').value,
-                telephone: document.getElementById('telInput').value,
-                remarques: document.getElementById('remarques').value
+                phone: document.getElementById('telInput').value,
+                date: document.getElementById('dateSelect').value,
+                time: document.getElementById('timeSelect').value,
+                message: `Réservation pour le ${document.getElementById('dateSelect').value} à ${document.getElementById('timeSelect').value}.\nTéléphone: ${document.getElementById('telInput').value}\nEmail: ${document.getElementById('emailInput').value}\nRemarques: ${document.getElementById('remarques').value}`
             };
 
-            // Remplace TON_SERVICE_ID et TON_TEMPLATE_ID
-            emailjs.send("TON_SERVICE_ID", "TON_TEMPLATE_ID", templateParams)
+            // Remplacez "TON_TEMPLATE_ID" par l'ID trouvé dans l'onglet Settings
+            emailjs.send("service_1s8ukx9", "TON_TEMPLATE_ID", templateParams)
                 .then(function() {
                     alert('Votre demande de réservation a bien été envoyée au Cocon De Noémie !');
                     bookingForm.reset();
                     modal.classList.remove('active');
                     modal.setAttribute('aria-hidden', 'true');
                 }, function(error) {
-                    alert('Une erreur est survenue lors de l\'envoi. Veuillez vérifier la configuration.');
+                    alert('Une erreur est survenue lors de l\'envoi. Vérifiez la console F12.');
                     console.error('Erreur EmailJS:', error);
                 })
                 .finally(function() {
