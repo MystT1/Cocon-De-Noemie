@@ -499,9 +499,9 @@
                 <div class="form-group">
                     <label for="soinSelect">Choisissez votre soin :</label>
                     <select id="soinSelect" required>
-                        <option value="suedois">Le Suédois Relaxant (75 €)</option>
-                        <option value="abhyanga">L'Énergétique Abhyanga (85 €)</option>
-                        <option value="drainage">Le Drainage Douceur (80 €)</option>
+                        <option value="Le Suédois Relaxant (75 €)">Le Suédois Relaxant (75 €)</option>
+                        <option value="L'Énergétique Abhyanga (85 €)">L'Énergétique Abhyanga (85 €)</option>
+                        <option value="Le Drainage Douceur (80 €)">Le Drainage Douceur (80 €)</option>
                     </select>
                 </div>
 
@@ -578,25 +578,30 @@
         const closeBtn = document.getElementById('closeModalBtn');
         const soinSelect = document.getElementById('soinSelect');
 
-        // Ouvrir la modale au clic sur un bouton de réservation
+        const soinMapping = {
+            'suedois': 'Le Suédois Relaxant (75 €)',
+            'abhyanga': "L'Énergétique Abhyanga (85 €)",
+            'drainage': 'Le Drainage Douceur (80 €)'
+        };
+
+        // Ouvrir la modale au clic sur un bouton
         openBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', () => {
                 const soinData = btn.getAttribute('data-soin');
-                if (soinData) {
-                    soinSelect.value = soinData;
+                if (soinData && soinMapping[soinData]) {
+                    soinSelect.value = soinMapping[soinData];
                 }
                 modal.classList.add('active');
                 modal.setAttribute('aria-hidden', 'false');
             });
         });
 
-        // Fermer au clic sur la croix
+        // Fermer la modale
         closeBtn.addEventListener('click', () => {
             modal.classList.remove('active');
             modal.setAttribute('aria-hidden', 'true');
         });
 
-        // Fermer si on clique en dehors du formulaire
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('active');
@@ -604,10 +609,34 @@
             }
         });
 
-        // Gestion de la soumission du formulaire
+        // Génération du lien mailto au moment de valider
         function envoyerReservation(event) {
             event.preventDefault();
-            alert('Votre demande de réservation a bien été envoyée au Cocon De Noémie !');
+
+            const emailDestinataire = "hleflem.ledantec@gmail.com";
+            const sujet = encodeURIComponent("Nouvelle demande de réservation - Cocon De Noémie");
+
+            const soin = document.getElementById('soinSelect').value;
+            const date = document.getElementById('dateSelect').value;
+            const heure = document.getElementById('timeSelect').value;
+            const nom = document.getElementById('nomInput').value;
+            const email = document.getElementById('emailInput').value;
+            const tel = document.getElementById('telInput').value;
+            const remarques = document.getElementById('remarques').value;
+
+            const corpsMail = encodeURIComponent(
+                `Bonjour,\n\nVoici une nouvelle demande de réservation :\n\n` +
+                `- Soin : ${soin}\n` +
+                `- Date : ${date}\n` +
+                `- Heure : ${heure}\n` +
+                `- Nom : ${nom}\n` +
+                `- E-mail client : ${email}\n` +
+                `- Téléphone : ${tel}\n` +
+                `- Remarques : ${remarques}\n`
+            );
+
+            window.location.href = `mailto:${emailDestinataire}?subject=${sujet}&body=${corpsMail}`;
+
             modal.classList.remove('active');
             modal.setAttribute('aria-hidden', 'true');
         }
