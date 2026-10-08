@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cocon De Noémie | Institut de Massage & Bien-être</title>
+    <!-- Inclusion du SDK EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         /* --- CHARTE GRAPHIQUE ACCESSIBLE & VARIABLES --- */
         :root {
@@ -132,6 +134,11 @@
             background-position: 100% center;
             color: #FFFFFF;
             box-shadow: 0 6px 18px rgba(162, 87, 98, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -495,7 +502,7 @@
             <button class="modal-close" id="closeModalBtn" aria-label="Fermer la fenêtre">&times;</button>
             <h2 id="modalTitle">Réserver votre <span class="gold-text">soin</span></h2>
             
-            <form class="booking-form" onsubmit="envoyerReservation(event)">
+            <form class="booking-form" id="bookingForm">
                 <div class="form-group">
                     <label for="soinSelect">Choisissez votre soin :</label>
                     <select id="soinSelect" required>
@@ -537,7 +544,7 @@
                     <textarea id="remarques" rows="3" placeholder="Zones de tension particulières, allergies..."></textarea>
                 </div>
 
-                <button type="submit" class="btn">Confirmer la demande</button>
+                <button type="submit" class="btn" id="submitBtn">Confirmer la demande</button>
             </form>
         </div>
     </div>
@@ -573,10 +580,17 @@
     </footer>
 
     <script>
+        // Initialisation d'EmailJS (Remplace TA_PUBLIC_KEY)
+        (function() {
+            emailjs.init("TA_PUBLIC_KEY");
+        })();
+
         const modal = document.getElementById('bookingModal');
         const openBtns = document.querySelectorAll('.open-booking-btn');
         const closeBtn = document.getElementById('closeModalBtn');
         const soinSelect = document.getElementById('soinSelect');
+        const bookingForm = document.getElementById('bookingForm');
+        const submitBtn = document.getElementById('submitBtn');
 
         const soinMapping = {
             'suedois': 'Le Suédois Relaxant (75 €)',
@@ -584,7 +598,6 @@
             'drainage': 'Le Drainage Douceur (80 €)'
         };
 
-        // Ouvrir la modale au clic sur un bouton
         openBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const soinData = btn.getAttribute('data-soin');
@@ -596,7 +609,6 @@
             });
         });
 
-        // Fermer la modale
         closeBtn.addEventListener('click', () => {
             modal.classList.remove('active');
             modal.setAttribute('aria-hidden', 'true');
@@ -609,37 +621,39 @@
             }
         });
 
-        // Génération du lien mailto au moment de valider
-        function envoyerReservation(event) {
+        // Envoi automatique du mail
+        bookingForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const emailDestinataire = "hleflem.ledantec@gmail.com";
-            const sujet = encodeURIComponent("Nouvelle demande de réservation - Cocon De Noémie");
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi en cours...';
 
-            const soin = document.getElementById('soinSelect').value;
-            const date = document.getElementById('dateSelect').value;
-            const heure = document.getElementById('timeSelect').value;
-            const nom = document.getElementById('nomInput').value;
-            const email = document.getElementById('emailInput').value;
-            const tel = document.getElementById('telInput').value;
-            const remarques = document.getElementById('remarques').value;
+            const templateParams = {
+                soin: soinSelect.value,
+                date: document.getElementById('dateSelect').value,
+                heure: document.getElementById('timeSelect').value,
+                nom: document.getElementById('nomInput').value,
+                email: document.getElementById('emailInput').value,
+                telephone: document.getElementById('telInput').value,
+                remarques: document.getElementById('remarques').value
+            };
 
-            const corpsMail = encodeURIComponent(
-                `Bonjour,\n\nVoici une nouvelle demande de réservation :\n\n` +
-                `- Soin : ${soin}\n` +
-                `- Date : ${date}\n` +
-                `- Heure : ${heure}\n` +
-                `- Nom : ${nom}\n` +
-                `- E-mail client : ${email}\n` +
-                `- Téléphone : ${tel}\n` +
-                `- Remarques : ${remarques}\n`
-            );
-
-            window.location.href = `mailto:${emailDestinataire}?subject=${sujet}&body=${corpsMail}`;
-
-            modal.classList.remove('active');
-            modal.setAttribute('aria-hidden', 'true');
-        }
+            // Remplace TON_SERVICE_ID et TON_TEMPLATE_ID
+            emailjs.send("TON_SERVICE_ID", "TON_TEMPLATE_ID", templateParams)
+                .then(function() {
+                    alert('Votre demande de réservation a bien été envoyée au Cocon De Noémie !');
+                    bookingForm.reset();
+                    modal.classList.remove('active');
+                    modal.setAttribute('aria-hidden', 'true');
+                }, function(error) {
+                    alert('Une erreur est survenue lors de l\'envoi. Veuillez vérifier la configuration.');
+                    console.error('Erreur EmailJS:', error);
+                })
+                .finally(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Confirmer la demande';
+                });
+        });
     </script>
 
 </body>
