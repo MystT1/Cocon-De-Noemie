@@ -7,15 +7,21 @@
     <style>
         /* --- CHARTE GRAPHIQUE & VARIABLES --- */
         :root {
-            --primary: #8FA89B; /* Vert sauge apaisant */
-            --secondary: #D4B2A0; /* Terracotta doux / poudré */
-            --dark: #2C3E35; /* Vert très foncé pour le texte */
-            --light: #FBF9F6; /* Blanc cassé pour le fond */
+            /* Palette Rose Gold & Harmonies */
+            --rose-gold: #B76E79;
+            --rose-gold-light: #E8C3C8;
+            --rose-gold-gradient: linear-gradient(135deg, #E6B2BA 0%, #B76E79 50%, #8E4A55 100%);
+            --rose-gold-shine: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 70%);
+            
+            --primary: #B76E79; 
+            --secondary: #D8A7B1; 
+            --dark: #2A2426; /* Prune/Anthracite profond pour une excellente lisibilité */
+            --light: #FAF5F5; /* Fond rosé très doux */
             --white: #FFFFFF;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 25px rgba(183, 110, 121, 0.15);
         }
 
-        /* --- STYLES GENERAUX --- */
+        /* --- STYLES GÉNÉRAUX --- */
         * {
             margin: 0;
             padding: 0;
@@ -44,33 +50,61 @@
             padding: 0 20px;
         }
 
-        /* --- BOUTONS --- */
-        .btn {
+        /* Effet Texte Rose Gold Métallisé (avec compatibilité standard) */
+        .gold-text {
+            background: var(--rose-gold-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: inline-block;
-            background-color: var(--secondary);
+        }
+
+        /* --- BOUTONS BRILLANTS --- */
+        .btn {
+            position: relative;
+            display: inline-block;
+            background: var(--rose-gold-gradient);
             color: var(--white);
-            padding: 12px 30px;
+            padding: 14px 32px;
             border-radius: 50px;
             font-weight: 600;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             border: none;
             cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+        }
+
+        /* Effet de reflet lumineux glissant sur le Rose Gold */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--rose-gold-shine);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::after {
+            left: 100%;
         }
 
         .btn:hover {
-            background-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(183, 110, 121, 0.45);
         }
 
         /* --- NAVIGATION --- */
         header {
-            background-color: rgba(251, 249, 246, 0.95);
+            background-color: rgba(250, 245, 245, 0.95);
+            backdrop-filter: blur(8px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border-bottom: 1px solid rgba(183, 110, 121, 0.15);
         }
 
         nav {
@@ -84,7 +118,6 @@
             font-size: 1.6rem;
             font-weight: bold;
             letter-spacing: 2px;
-            color: var(--dark);
         }
 
         .nav-links {
@@ -98,6 +131,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: color 0.3s;
+            color: var(--dark);
         }
 
         .nav-links a:hover {
@@ -106,13 +140,13 @@
 
         /* --- ACCUEIL (HERO) --- */
         .hero {
-            padding: 100px 0;
+            padding: 120px 0;
             text-align: center;
-            background: radial-gradient(circle at top, #F3ECE6 0%, var(--light) 70%);
+            background: radial-gradient(circle at top, #F7E7E9 0%, var(--light) 70%);
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.2rem;
             margin-bottom: 20px;
             font-weight: 400;
         }
@@ -120,19 +154,21 @@
         .hero p {
             font-size: 1.2rem;
             max-width: 600px;
-            margin: 0 auto 30px auto;
-            color: #607168;
+            margin: 0 auto 35px auto;
+            color: #635255;
         }
 
         /* --- SECTION : PHILOSOPHIE --- */
         .about {
-            padding: 80px 0;
+            padding: 90px 0;
             background-color: var(--white);
             text-align: center;
+            border-top: 1px solid rgba(183, 110, 121, 0.1);
+            border-bottom: 1px solid rgba(183, 110, 121, 0.1);
         }
 
         .about h2 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             margin-bottom: 20px;
         }
 
@@ -140,17 +176,17 @@
             max-width: 800px;
             margin: 0 auto;
             font-size: 1.1rem;
-            color: #555;
+            color: #55484A;
         }
 
         /* --- SECTION : CARTE DES SOINS --- */
         .services {
-            padding: 80px 0;
+            padding: 90px 0;
         }
 
         .services h2 {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             margin-bottom: 50px;
         }
 
@@ -163,47 +199,50 @@
         .card {
             background-color: var(--white);
             padding: 40px 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(183, 110, 121, 0.15);
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(183, 110, 121, 0.25);
         }
 
         .card h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
+            color: var(--dark);
         }
 
         .card .duration {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--primary);
             text-transform: uppercase;
             font-weight: 600;
+            letter-spacing: 1px;
             margin-bottom: 10px;
         }
 
         .card .price {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: bold;
-            color: var(--dark);
             margin-bottom: 15px;
         }
 
         .card p {
             font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 20px;
+            color: #66585A;
+            margin-bottom: 25px;
         }
 
         /* --- CONTACT & FOOTER --- */
         footer {
             background-color: var(--dark);
             color: var(--white);
-            padding: 60px 0 30px 0;
+            padding: 70px 0 30px 0;
         }
 
         .footer-grid {
@@ -217,29 +256,30 @@
             font-size: 1.2rem;
             margin-bottom: 20px;
             letter-spacing: 1px;
+            color: var(--rose-gold-light);
         }
 
         .footer-col p {
             font-size: 0.9rem;
-            color: #A9BCA3;
+            color: #D3C4C6;
             margin-bottom: 10px;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(232, 195, 200, 0.15);
             padding-top: 20px;
             text-align: center;
             font-size: 0.8rem;
-            color: #889;
+            color: #A39295;
         }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .nav-links {
-                display: none; /* Cache les liens sur mobile (à remplacer par un menu burger en JS) */
+                display: none;
             }
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 2.3rem;
             }
         }
     </style>
@@ -250,7 +290,7 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo">LA MAIN DOUCE</div>
+                <div class="logo gold-text">LA MAIN DOUCE</div>
                 <ul class="nav-links">
                     <li><a href="#accueil">Accueil</a></li>
                     <li><a href="#concept">Notre Concept</a></li>
@@ -265,7 +305,7 @@
     <!-- SECTION HERO (ACCUEIL) -->
     <section id="accueil" class="hero">
         <div class="container">
-            <h1>Libérez vos tensions, retrouvez l'harmonie</h1>
+            <h1>Libérez vos tensions, <span class="gold-text">retrouvez l'harmonie</span></h1>
             <p>Une parenthèse de sérénité absolue au cœur de notre institut. Laissez nos mains expertes prendre soin de votre corps et de votre esprit.</p>
             <a href="#soins" class="btn">Découvrir nos soins</a>
         </div>
@@ -274,7 +314,7 @@
     <!-- SECTION CONCEPT -->
     <section id="concept" class="about">
         <div class="container">
-            <h2>L'art du toucher bienveillant</h2>
+            <h2>L'art du <span class="gold-text">toucher bienveillant</span></h2>
             <p>À l'institut <strong>La Main Douce</strong>, nous croyons que chaque corps est unique. Nos massages sont entièrement personnalisés et réalisés avec des huiles biologiques et naturelles, sélectionnées pour leurs vertus thérapeutiques et relaxantes. Un voyage sensoriel dédié à votre bien-être global.</p>
         </div>
     </section>
@@ -282,14 +322,14 @@
     <!-- SECTION MASSAGES -->
     <section id="soins" class="services">
         <div class="container">
-            <h2>Nos Massages Signatures</h2>
+            <h2>Nos Massages <span class="gold-text">Signatures</span></h2>
             <div class="grid-services">
                 
                 <!-- Soin 1 -->
                 <div class="card">
                     <div class="duration">60 ou 90 minutes</div>
                     <h3>Le Suédois Relaxant</h3>
-                    <div class="price">75 €</div>
+                    <div class="price gold-text">75 €</div>
                     <p>Un massage enveloppant aux huiles chaudes pour dénouer les tensions musculaires et apaiser l'esprit.</p>
                     <a href="#contact" class="btn">Choisir</a>
                 </div>
@@ -298,7 +338,7 @@
                 <div class="card">
                     <div class="duration">75 minutes</div>
                     <h3>L'Énergétique Abhyanga</h3>
-                    <div class="price">85 €</div>
+                    <div class="price gold-text">85 €</div>
                     <p>Inspiré de la médecine traditionnelle indienne, ce massage rythmé rééquilibre l'énergie vitale de votre corps.</p>
                     <a href="#contact" class="btn">Choisir</a>
                 </div>
@@ -307,7 +347,7 @@
                 <div class="card">
                     <div class="duration">60 minutes</div>
                     <h3>Le Drainage Douceur</h3>
-                    <div class="price">80 €</div>
+                    <div class="price gold-text">80 €</div>
                     <p>Des mouvements doux et précis pour stimuler la circulation, éliminer les toxines et retrouver une sensation de légèreté.</p>
                     <a href="#contact" class="btn">Choisir</a>
                 </div>
@@ -322,7 +362,7 @@
             <div class="footer-grid">
                 
                 <div class="footer-col">
-                    <h4>La Main Douce</h4>
+                    <h4 class="gold-text">La Main Douce</h4>
                     <p>Votre havre de paix dédié au massage bien-être.</p>
                 </div>
 
