@@ -5,43 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Main Douce | Institut de Massage & Bien-être</title>
     <style>
-        /* --- CHARTE GRAPHIQUE & VARIABLES --- */
+        /* --- CHARTE GRAPHIQUE ACCESSIBLE & VARIABLES --- */
         :root {
-            /* Palette Rose Gold & Harmonies */
-            --rose-gold: #B76E79;
-            --rose-gold-light: #E8C3C8;
-            --rose-gold-gradient: linear-gradient(135deg, #E6B2BA 0%, #B76E79 50%, #8E4A55 100%);
-            --rose-gold-shine: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 70%);
+            /* Palette Rose Gold adaptée (Contraste suffisant WCAG AA) */
+            --rose-gold-main: #A25762;
+            --rose-gold-dark: #7A3C45;
+            --rose-gold-gradient: linear-gradient(135deg, #B86B76 0%, #A25762 50%, #7A3C45 100%);
+            --rose-gold-shine: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 70%);
             
-            --primary: #B76E79; 
-            --secondary: #D8A7B1; 
-            --dark: #2A2426; /* Prune/Anthracite profond pour une excellente lisibilité */
-            --light: #FAF5F5; /* Fond rosé très doux */
-            --white: #FFFFFF;
-            --shadow: 0 8px 25px rgba(183, 110, 121, 0.15);
+            --dark-text: #211B1C; /* Contraste élevé pour la lisibilité */
+            --light-bg: #FAF6F6;  /* Fond très doux, non aveuglant */
+            --card-bg: #FFFFFF;
+            --border-color: #B8A2A5;
+            --focus-outline: #005A9C; /* Bleu à haut contraste pour le focus clavier */
         }
 
-        /* --- STYLES GÉNÉRAUX --- */
+        /* Support automatique du Mode Sombre (pour sensibilité oculaire) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --dark-text: #F5EBEB;
+                --light-bg: #1A1415;
+                --card-bg: #272021;
+                --border-color: #5C4B4E;
+                --rose-gold-main: #D4818D;
+                --rose-gold-dark: #E8A8B1;
+            }
+        }
+
+        /* --- STYLES GÉNÉRAUX ACCESSIBLES --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            font-size: 1.05rem;
         }
 
-        p, a, button {
-            font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+        /* Titres lisibles */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--dark-text);
+            line-height: 1.3;
         }
 
         a {
-            text-decoration: none;
             color: inherit;
+        }
+
+        /* Lien d'évitement pour lecteurs d'écran & clavier */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            background: var(--dark-text);
+            color: var(--light-bg);
+            padding: 8px 16px;
+            z-index: 2000;
+            border-radius: 4px;
+            text-decoration: underline;
+        }
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Indicateurs de focus accessibles (Navigation au clavier) */
+        :focus-visible {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 3px;
         }
 
         .container {
@@ -50,33 +86,36 @@
             padding: 0 20px;
         }
 
-        /* Effet Texte Rose Gold Métallisé (avec compatibilité standard) */
+        /* Texte Rose Gold Lisible */
         .gold-text {
-            background: var(--rose-gold-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
+            color: var(--rose-gold-main);
+            font-weight: 700;
         }
 
-        /* --- BOUTONS BRILLANTS --- */
+        /* --- BOUTONS ACCESSIBLES --- */
         .btn {
             position: relative;
             display: inline-block;
-            background: var(--rose-gold-gradient);
-            color: var(--white);
+            background: var(--rose-gold-main);
+            color: #FFFFFF;
             padding: 14px 32px;
             border-radius: 50px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            border: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            border: 2px solid transparent;
             cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        /* Effet de reflet lumineux glissant sur le Rose Gold */
+        .btn:hover, .btn:focus-visible {
+            background: var(--rose-gold-dark);
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        /* Effet brillant doux (désactivé si l'utilisateur réduit les animations) */
         .btn::after {
             content: '';
             position: absolute;
@@ -85,26 +124,30 @@
             width: 100%;
             height: 100%;
             background: var(--rose-gold-shine);
-            transition: all 0.6s ease;
+            transition: left 0.6s ease;
         }
 
         .btn:hover::after {
             left: 100%;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(183, 110, 121, 0.45);
+        @media (prefers-reduced-motion: reduce) {
+            .btn::after {
+                display: none;
+            }
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
         }
 
         /* --- NAVIGATION --- */
         header {
-            background-color: rgba(250, 245, 245, 0.95);
-            backdrop-filter: blur(8px);
+            background-color: var(--card-bg);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(183, 110, 121, 0.15);
+            border-bottom: 2px solid var(--border-color);
         }
 
         nav {
@@ -117,7 +160,8 @@
         .logo {
             font-size: 1.6rem;
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .nav-links {
@@ -127,66 +171,63 @@
         }
 
         .nav-links a {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-            color: var(--dark);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
         }
 
-        .nav-links a:hover {
-            color: var(--primary);
+        .nav-links a:hover, .nav-links a:focus-visible {
+            color: var(--rose-gold-main);
+            border-bottom-color: var(--rose-gold-main);
         }
 
         /* --- ACCUEIL (HERO) --- */
         .hero {
-            padding: 120px 0;
+            padding: 90px 0;
             text-align: center;
-            background: radial-gradient(circle at top, #F7E7E9 0%, var(--light) 70%);
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             margin-bottom: 20px;
-            font-weight: 400;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
+            font-size: 1.25rem;
+            max-width: 650px;
             margin: 0 auto 35px auto;
-            color: #635255;
         }
 
         /* --- SECTION : PHILOSOPHIE --- */
         .about {
-            padding: 90px 0;
-            background-color: var(--white);
+            padding: 80px 0;
             text-align: center;
-            border-top: 1px solid rgba(183, 110, 121, 0.1);
-            border-bottom: 1px solid rgba(183, 110, 121, 0.1);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .about h2 {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             margin-bottom: 20px;
         }
 
         .about p {
             max-width: 800px;
             margin: 0 auto;
-            font-size: 1.1rem;
-            color: #55484A;
+            font-size: 1.15rem;
         }
 
         /* --- SECTION : CARTE DES SOINS --- */
         .services {
-            padding: 90px 0;
+            padding: 80px 0;
         }
 
         .services h2 {
             text-align: center;
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             margin-bottom: 50px;
         }
 
@@ -197,52 +238,48 @@
         }
 
         .card {
-            background-color: var(--white);
+            background-color: var(--card-bg);
             padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid rgba(183, 110, 121, 0.15);
-        }
-
-        .card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 30px rgba(183, 110, 121, 0.25);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card h3 {
             font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .card .duration {
-            font-size: 0.85rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 1px;
             margin-bottom: 10px;
         }
 
+        .card .duration {
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            color: var(--rose-gold-main);
+        }
+
         .card .price {
-            font-size: 1.6rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 800;
             margin-bottom: 15px;
         }
 
         .card p {
-            font-size: 0.95rem;
-            color: #66585A;
+            font-size: 1rem;
             margin-bottom: 25px;
         }
 
-        /* --- CONTACT & FOOTER --- */
+        /* --- FOOTER --- */
         footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 70px 0 30px 0;
+            background-color: #151011;
+            color: #F5EBEB;
+            padding: 60px 0 30px 0;
+            border-top: 3px solid var(--rose-gold-main);
         }
 
         .footer-grid {
@@ -253,24 +290,28 @@
         }
 
         .footer-col h4 {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             margin-bottom: 20px;
-            letter-spacing: 1px;
-            color: var(--rose-gold-light);
+            color: var(--rose-gold-main);
         }
 
         .footer-col p {
-            font-size: 0.9rem;
-            color: #D3C4C6;
+            font-size: 1rem;
             margin-bottom: 10px;
+            color: #D6C7C9;
+        }
+
+        .footer-col a {
+            color: #FFFFFF;
+            text-decoration: underline;
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(232, 195, 200, 0.15);
+            border-top: 1px solid #33282A;
             padding-top: 20px;
             text-align: center;
-            font-size: 0.8rem;
-            color: #A39295;
+            font-size: 0.9rem;
+            color: #A8989A;
         }
 
         /* --- RESPONSIVE --- */
@@ -279,18 +320,21 @@
                 display: none;
             }
             .hero h1 {
-                font-size: 2.3rem;
+                font-size: 2.1rem;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- LIEN D'ÉVITEMENT ACCESSIBILITÉ -->
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
+
     <!-- BARRE DE NAVIGATION -->
-    <header>
+    <header role="banner">
         <div class="container">
-            <nav>
-                <div class="logo gold-text">LA MAIN DOUCE</div>
+            <nav role="navigation" aria-label="Navigation principale">
+                <div class="logo gold-text">La Main Douce</div>
                 <ul class="nav-links">
                     <li><a href="#accueil">Accueil</a></li>
                     <li><a href="#concept">Notre Concept</a></li>
@@ -302,67 +346,78 @@
         </div>
     </header>
 
-    <!-- SECTION HERO (ACCUEIL) -->
-    <section id="accueil" class="hero">
-        <div class="container">
-            <h1>Libérez vos tensions, <span class="gold-text">retrouvez l'harmonie</span></h1>
-            <p>Une parenthèse de sérénité absolue au cœur de notre institut. Laissez nos mains expertes prendre soin de votre corps et de votre esprit.</p>
-            <a href="#soins" class="btn">Découvrir nos soins</a>
-        </div>
-    </section>
+    <!-- CONTENU PRINCIPAL -->
+    <main id="contenu-principal">
 
-    <!-- SECTION CONCEPT -->
-    <section id="concept" class="about">
-        <div class="container">
-            <h2>L'art du <span class="gold-text">toucher bienveillant</span></h2>
-            <p>À l'institut <strong>La Main Douce</strong>, nous croyons que chaque corps est unique. Nos massages sont entièrement personnalisés et réalisés avec des huiles biologiques et naturelles, sélectionnées pour leurs vertus thérapeutiques et relaxantes. Un voyage sensoriel dédié à votre bien-être global.</p>
-        </div>
-    </section>
-
-    <!-- SECTION MASSAGES -->
-    <section id="soins" class="services">
-        <div class="container">
-            <h2>Nos Massages <span class="gold-text">Signatures</span></h2>
-            <div class="grid-services">
-                
-                <!-- Soin 1 -->
-                <div class="card">
-                    <div class="duration">60 ou 90 minutes</div>
-                    <h3>Le Suédois Relaxant</h3>
-                    <div class="price gold-text">75 €</div>
-                    <p>Un massage enveloppant aux huiles chaudes pour dénouer les tensions musculaires et apaiser l'esprit.</p>
-                    <a href="#contact" class="btn">Choisir</a>
-                </div>
-
-                <!-- Soin 2 -->
-                <div class="card">
-                    <div class="duration">75 minutes</div>
-                    <h3>L'Énergétique Abhyanga</h3>
-                    <div class="price gold-text">85 €</div>
-                    <p>Inspiré de la médecine traditionnelle indienne, ce massage rythmé rééquilibre l'énergie vitale de votre corps.</p>
-                    <a href="#contact" class="btn">Choisir</a>
-                </div>
-
-                <!-- Soin 3 -->
-                <div class="card">
-                    <div class="duration">60 minutes</div>
-                    <h3>Le Drainage Douceur</h3>
-                    <div class="price gold-text">80 €</div>
-                    <p>Des mouvements doux et précis pour stimuler la circulation, éliminer les toxines et retrouver une sensation de légèreté.</p>
-                    <a href="#contact" class="btn">Choisir</a>
-                </div>
-
+        <!-- SECTION HERO (ACCUEIL) -->
+        <section id="accueil" class="hero" aria-labelledby="titre-hero">
+            <div class="container">
+                <h1 id="titre-hero">Libérez vos tensions, <span class="gold-text">retrouvez l'harmonie</span></h1>
+                <p>Une parenthèse de sérénité absolue au cœur de notre institut. Laissez nos mains expertes prendre soin de votre corps et de votre esprit.</p>
+                <a href="#soins" class="btn">Découvrir nos soins</a>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- SECTION CONCEPT -->
+        <section id="concept" class="about" aria-labelledby="titre-concept">
+            <div class="container">
+                <h2 id="titre-concept">L'art du <span class="gold-text">toucher bienveillant</span></h2>
+                <p>À l'institut <strong>La Main Douce</strong>, nous croyons que chaque corps est unique. Nos massages sont entièrement personnalisés et réalisés avec des huiles biologiques et naturelles, sélectionnées pour leurs vertus thérapeutiques et relaxantes. Un voyage sensoriel dédié à votre bien-être global.</p>
+            </div>
+        </section>
+
+        <!-- SECTION MASSAGES -->
+        <section id="soins" class="services" aria-labelledby="titre-soins">
+            <div class="container">
+                <h2 id="titre-soins">Nos Massages <span class="gold-text">Signatures</span></h2>
+                <div class="grid-services">
+                    
+                    <!-- Soin 1 -->
+                    <article class="card">
+                        <div>
+                            <div class="duration">Durée : 60 ou 90 minutes</div>
+                            <h3>Le Suédois Relaxant</h3>
+                            <div class="price gold-text" aria-label="Prix : 75 euros">75 €</div>
+                            <p>Un massage enveloppant aux huiles chaudes pour dénouer les tensions musculaires et apaiser l'esprit.</p>
+                        </div>
+                        <a href="#contact" class="btn" aria-label="Réserver le massage Suédois Relaxant">Choisir ce soin</a>
+                    </article>
+
+                    <!-- Soin 2 -->
+                    <article class="card">
+                        <div>
+                            <div class="duration">Durée : 75 minutes</div>
+                            <h3>L'Énergétique Abhyanga</h3>
+                            <div class="price gold-text" aria-label="Prix : 85 euros">85 €</div>
+                            <p>Inspiré de la médecine traditionnelle indienne, ce massage rythmé rééquilibre l'énergie vitale de votre corps.</p>
+                        </div>
+                        <a href="#contact" class="btn" aria-label="Réserver le massage Énergétique Abhyanga">Choisir ce soin</a>
+                    </article>
+
+                    <!-- Soin 3 -->
+                    <article class="card">
+                        <div>
+                            <div class="duration">Durée : 60 minutes</div>
+                            <h3>Le Drainage Douceur</h3>
+                            <div class="price gold-text" aria-label="Prix : 80 euros">80 €</div>
+                            <p>Des mouvements doux et précis pour stimuler la circulation, éliminer les toxines et retrouver une sensation de légèreté.</p>
+                        </div>
+                        <a href="#contact" class="btn" aria-label="Réserver le massage Drainage Douceur">Choisir ce soin</a>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <!-- FOOTER / CONTACT -->
-    <footer id="contact">
+    <footer id="contact" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 
                 <div class="footer-col">
-                    <h4 class="gold-text">La Main Douce</h4>
+                    <h4>La Main Douce</h4>
                     <p>Votre havre de paix dédié au massage bien-être.</p>
                 </div>
 
@@ -374,9 +429,9 @@
 
                 <div class="footer-col">
                     <h4>Contact & Réservation</h4>
-                    <p>📍 12 rue de la Détente, 75000 Paris</p>
-                    <p>📞 01 23 45 67 89</p>
-                    <p>✉️ contact@lamaindouce.com</p>
+                    <p>📍 Adresse : 12 rue de la Détente, 75000 Paris</p>
+                    <p>📞 Téléphone : <a href="tel:0123456789">01 23 45 67 89</a></p>
+                    <p>✉️ E-mail : <a href="mailto:contact@lamaindouce.com">contact@lamaindouce.com</a></p>
                 </div>
 
             </div>
